@@ -8,23 +8,25 @@ class RandomDice extends StatefulWidget {
 }
 
 class _RandomDiceState extends State<RandomDice> {
-  int number1 = 1;
+  int number1 = 2;
   int number2 = 2;
   int count1 = 0;
   int count2 = 0;
+  int bottomcount1 = 0;
+  int bottomcount2 = 0;
   var rand = Random();
 
   void getRandomvalue1() {
     setState(() {
       number1 = rand.nextInt(6);
-      count1 = count1+number1+1;
+      count1 = count1 + number1 + 1;
     });
   }
 
   void getRandomvalue2() {
     setState(() {
       number2 = rand.nextInt(6);
-      count2 = count2+number2+1;
+      count2 = count2 + number2 + 1;
     });
   }
 
@@ -36,6 +38,7 @@ class _RandomDiceState extends State<RandomDice> {
       ),
       body: Center(
           child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -58,16 +61,22 @@ class _RandomDiceState extends State<RandomDice> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    getRandomvalue1();
-                  },
-                  child: Text('Player 1')),
-              ElevatedButton(
-                  onPressed: () {
-                    getRandomvalue2();
-                  },
-                  child: Text('Player 2')),
+              bottomcount1 < 5
+                  ? ElevatedButton(
+                      onPressed: () {
+                        bottomcount1++;
+                        getRandomvalue1();
+                      },
+                      child: const Text('Player 1'))
+                  : Text("Total Score : $count1"),
+              bottomcount2 < 5
+                  ? ElevatedButton(
+                      onPressed: () {
+                        bottomcount2++;
+                        getRandomvalue2();
+                      },
+                      child: const Text('Player 2'))
+                  : Text("Total score : $count2"),
             ],
           ),
           SizedBox(
@@ -78,7 +87,7 @@ class _RandomDiceState extends State<RandomDice> {
             children: [
               Text(
                 count1.toString(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -91,7 +100,12 @@ class _RandomDiceState extends State<RandomDice> {
                 ),
               ),
             ],
-          )
+          ),
+          count1 > count2
+              ? Text('Player1 is winer')
+              : count2 == count1
+                  ? Text('Match draw')
+                  : Text('Player2 is winer'),
         ],
       )),
     );
